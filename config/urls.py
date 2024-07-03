@@ -26,3 +26,4 @@ urlpatterns = [
     path('baton/', include('baton.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+

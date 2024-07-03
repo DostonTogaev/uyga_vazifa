@@ -1,7 +1,8 @@
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
 
-from app.models import Product, Category
+from app.models import Product, Category, Comment, Order, Customer
 
 # Register your models here.
 
@@ -20,11 +21,16 @@ class ProductAdmin(admin.ModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
-
 admin.site.register(Category)
 
+admin.site.register(Customer)
+admin.site.register(Order)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'message', 'product_id')
 
 
 
-admin.site.unregister(User)
+admin.site.register(User)
 admin.site.unregister(Group)

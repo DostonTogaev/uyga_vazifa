@@ -19,6 +19,11 @@
                             <span>${{ product.discount_priced }}</span>
                         </div>
                         <p class="lead">{{ product.description }}</p>
+                         <div class="col-1">
+                            <a class="btn btn-outline-dark mt-auto" href="{% url 'edit' product.id %}"> edit </a>
+                             <a class="btn btn-outline-dark mt-auto" href="{% url 'delete' product.id %}"> delete </a>
+                        </div>
+
                         <div class="d-flex">
                             <form>
                                 <div class="form-group">
@@ -26,18 +31,18 @@
                                 </div>
                                 <div class="form-group mb-3">
                                   <label for="formGroupExampleInput">Your name</label>
-                                  <input type="text" class="form-control"  placeholder="Your name">
+                                  <input type="text" class="form-control"  placeholder="Your name" name="name">
                                 </div>
                                 <div class="form-group mb-3">
                                   <label for="formGroupExampleInput2">Your phone</label>
-                                  <input type="text" class="form-control" placeholder="Your phone">
+                                  <input type="tel" class="form-control" placeholder="Your phone" name="phone_number">
                                 </div>
         
                                
         
                                   <div class="form-group mb-3">
                                    
-                                    <input type="text" class="btn btn-success" value="Send">
+                                    <input type="submit" class="btn btn-success" value="Send">
                                   </div>
                               </form>
                            
@@ -79,7 +84,7 @@
                         </div>
                         <div class="form-group mb-3">
                           <label for="formGroupExampleInput2">Your email</label>
-                          <input type="text" class="form-control" placeholder="Your email" name="email">
+                          <input type="email" class="form-control" placeholder="Your email" name="email">
                         </div>
 
                         <div class="form-group mb-3">
@@ -103,24 +108,24 @@
             <div class="container px-4 px-lg-5 mt-5">
                 <h2 class="fw-bolder mb-4">Related products</h2>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                 {% for similar_product in similar_products %}
+                 {% for related_product in related_products %}
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Product image-->
                             <img class="card-img-top" 
-                            src="{{ similar_product.image.url }}" alt="..." />
+                            src="{{ related_product.image.url }}" alt="..." />
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
                                     <!-- Product name-->
-                                    <h5 class="fw-bolder">{{ similar_product.name }}</h5>
+                                    <h5 class="fw-bolder">{{ related_product.name }}</h5>
                                     <!-- Product price-->
-                                    ${{ similar_product.price }}
+                                    ${{ related_product.price }}
                                 </div>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product-detail' similar_product.id %}">View product</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product-detail' related_product.id %}">View product</a></div>
 
                         
                             </div>

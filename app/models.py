@@ -1,5 +1,8 @@
-from django.db import models
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 
+from django.db import models
+from app.managers import CustomerManager
 # Create your models here.
 class Category(models.Model):
     title = models.CharField(max_length=255, null=True, blank=True)
@@ -26,7 +29,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='images/')
     rating = models.PositiveIntegerField(choices=RatingChoices.choices, default=RatingChoices.zero)
     discount = models.IntegerField(default=0)
-    category = models.ManyToManyField(Category, default=None)
+    category = models.ForeignKey(Category, default=None, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -59,3 +62,29 @@ class Comment(models.Model):
 
     class Meta:
         verbose_name_plural = 'Izohlar'
+
+class Order(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=13, null=True, blank=True)
+    product = models.ForeignKey('Product', on_delete=models.SET_NULL, related_name='orders', null=True, blank=True)
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.phone_number
+
+class Customer(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=255, null=True, blank=True)
+
+
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=True)
+
+    objects = CustomerManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.email

@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Product, Comment
+from app.models import Product, Comment, Order
 
 
 
@@ -14,3 +14,7 @@ class CommentModelForm(forms.ModelForm):
         model = Comment
         fields = ['full_name', 'email', 'message']
 
+class OrderModelForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ()

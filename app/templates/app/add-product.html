@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Product</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block add_product_content %}
+
 <form method="post" action="" enctype="multipart/form-data">
     {{ form.as_p }}
     {% csrf_token %}
@@ -12,5 +10,5 @@
         <button class="btn btn-primary" type="submit">Save</button>
     </div>
 </form>
-</body>
-</html>
+
+{% endblock %}
