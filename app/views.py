@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.db.models import Q
 from app.forms import ProductModelForm, CommentModelForm, OrderModelForm
@@ -10,6 +11,7 @@ from app.models import Product, Category
 # Create your views here.
 
 def index_page(request, category_id=None):
+
     filter_type = request.GET.get('filter', '')
     search_query = request.GET.get('search', '')
     categories = Category.objects.all()
@@ -30,22 +32,20 @@ def index_page(request, category_id=None):
         products = Product.objects.filter(
             Q(name__icontains=search_query) | Q(rating__icontains=search_query))
 
+    paginator = Paginator(products, 4)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     context = {
         'products': products,
-        'categories': categories
+        'categories': categories,
+        'page_obj': page_obj,
     }
     return render(request, 'app/home.html', context)
 
 
 def product_detail_page(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    price_lower_bound = product.price * 0.8
-    price_upper_bound = product.price * 1.2
-
     related_products = Product.objects.filter(category=product.category).exclude(id=product.id)
-
-    #related_products = Product.objects.filter(Q(price__lte=price_upper_bound) & Q(price__gte=price_lower_bound)).exclude(id=product_id)
-
     comments = product.comments.filter(is_active=True).order_by('-created_at')[:5]
 
     count = product.comments.count()
@@ -91,19 +91,7 @@ def add_comment(request, product_id):
 
     return render(request, 'app/detail.html', context)
 
-def expensive_product(request):
-    products = Product.objects.filter(price__gt=50000)
-    context = {
-        'products': products,
-    }
-    return render(request, 'app/home.html', context)
 
-def cheap_product(request):
-    products = Product.objects.filter(price__lt=50000)
-    context = {
-        'products': products,
-    }
-    return render(request, 'app/home.html', context)
 
 def add_order(request, product_id):
     product = Product.objects.filter(id=product_id).first()  # [1]

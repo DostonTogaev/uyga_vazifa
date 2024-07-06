@@ -7,76 +7,105 @@
 
 {% block product_content %}
 <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Texnika_Uz</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">maishiy texnika magazin</p>
-                </div>
-            </div>
-        </header>
-        <!-- Section-->
-
-        <div class="container mt-5">
-            <div class="text-left">
-                <h3>Filter by</h3>
-            </div>
-            <div class="row">
-                <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="?filter=expensive"> Expensive </a>
-                </div>
-                <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="?filter=cheap"> Cheap </a>
-                </div>
-                 <div class="col-1">
-                    <a class="btn btn-outline-dark mt-auto" href="{% url 'add_product' %}"> +ADD </a>
-                </div>
-
-
-
-            </div>
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Texnika_Uz</h1>
+            <p class="lead fw-normal text-white-50 mb-0">maishiy texnika magazin</p>
         </div>
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                {% for product in products %}
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
-                            <!-- Product details-->
+    </div>
+</header>
+<!-- Section-->
 
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">{{ product.name }}</h5>
-                                    <!-- Product reviews-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
-                                    ${{ product.discount_priced }}
+<div class="container mt-5">
+    <div class="text-left">
+        <h3>Filter by</h3>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            <a class="btn btn-outline-dark mt-auto" href="?filter=expensive"> Expensive </a>
+        </div>
+        <div class="col-1">
+            <a class="btn btn-outline-dark mt-auto" href="?filter=cheap"> Cheap </a>
+        </div>
+        <div class="col-1">
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'add_product' %}"> +ADD </a>
+        </div>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in page_obj %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Sale badge-->
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                        <!-- Product image-->
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">{{ product.name }}</h5>
+                                <!-- Product reviews-->
+                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 </div>
-                            </div>
-
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product-detail' product.id %}">View product</a></div>
-                              
-                                
+                                <!-- Product price-->
+                                <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
+                                ${{ product.discount_priced }}
                             </div>
                         </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product-detail' product.id %}">View product</a></div>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
-        </section>
-        <!-- Footer-->
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<div class="d-flex align-items-center justify-content-center mt-4">
+    {% if page_obj.has_previous %}
+        <a class="btn btn-sm btn-falcon-default me-1" href="?page={{ page_obj.previous_page_number }}" title="Previous">
+            <span class="fas fa-chevron-left"></span>
+        </a>
+    {% else %}
+        <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" disabled>
+            <span class="fas fa-chevron-left"></span>
+        </button>
+    {% endif %}
+    <ul class="pagination mb-0">
+        {% for page_num in page_obj.paginator.page_range %}
+            {% if page_obj.number == page_num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ page_num }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% if page_obj.has_next %}
+        <a class="btn btn-sm btn-falcon-default ms-1" href="?page={{ page_obj.next_page_number }}" title="Next">
+            <span class="fas fa-chevron-right"></span>
+        </a>
+    {% else %}
+        <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" disabled>
+            <span class="fas fa-chevron-right"></span>
+        </button>
+    {% endif %}
+</div>
+
+<!-- Footer-->
 {% endblock %}
